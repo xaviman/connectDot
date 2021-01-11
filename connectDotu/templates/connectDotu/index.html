@@ -30,13 +30,13 @@
     <h2 id="start" style="margin: auto; text-align: center;">Game NOT Started!</h2>
     <div style="margin: auto;display:table" id="scoreBoard">
         {% for player, score in dash_board.items %}
-        <p>{{ player }}:{{ score }} </p>
+        <p class="score" id="score_{{ player }}">{{ player }}:{{ score }} </p>
         {% endfor %}
-        <p> NOw mt asubd</p>
+        <p id="next_id"> NOw mt asubd</p>
     </div>
     <div id="playground" rows="{{ rows }}" columns="{{ columns }}">
         {% for row in rows %}
-        <div class="row">
+        <div class="row" style="">
             {% for column in columns %}
             <div class="dot" id="dot {{ row }} {{ column }}"></div>
             {% endfor %}
@@ -44,8 +44,8 @@
         {% endfor %}
     </div>
     <div style="margin: 20px auto; display:table">
-        <input style="margin: 20px auto; display:table" id="copy">
-        <button style="margin: 20px auto; display:table" onclick="copyToClip()">Copy</button>
+        <input  id="copy">
+        <button  onclick="copyToClip()">Copy</button>
     </div>
     {% endif %}
 </body>

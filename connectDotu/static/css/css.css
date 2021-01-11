@@ -5,7 +5,7 @@ body{
 #playground {
     background-color: cornsilk;
     margin: auto;
-    display: table;
+    display: block;
     /* cursor: pointer; */
     /* margin: 20px 0; */
 }
@@ -16,7 +16,7 @@ body{
   background-color: black;
   border-radius: 50%;
   display: inline-block;
-  margin: 5px;
+  margin: auto;
 }
 
 .letter{
@@ -25,4 +25,7 @@ body{
     height: 5px;
     width: 5px;
     position: absolute;
+}
+.score{
+    margin: 0;
 }

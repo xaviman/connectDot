@@ -28,13 +28,33 @@ var color = "red";
 loc = window.location.pathname;
 var you = loc.split("/")[3];
 var myturn = false;
-
+var gap;
 function init() {
   document.getElementById("copy").value = window.location.href.substring(
     0,
     window.location.href.indexOf("/", 40)
   );
   var canvas = document.getElementById("playground");
+  columns =
+    canvas.querySelectorAll(".dot").length /
+    canvas.querySelectorAll(".row").length;
+  gap = (Math.min(canvas.clientWidth, 600) - columns * 6) / columns;
+  console.log(
+    gap,
+    canvas.clientWidth,
+    canvas.querySelectorAll(".dot").length,
+    canvas.querySelectorAll(".row").length
+  );
+  document.querySelectorAll(".dot").forEach((el) => {
+    // var r = el.getBoundingClientRect();
+    el.style.margin = gap / 2 + "px";
+  });
+  // console.log(
+  //   gap,
+  //   document.getElementById("dot 0 0").getBoundingClientRect().x,
+  //   document.getElementById("dot 0 1").getBoundingClientRect().x
+  // );
+
   var dot1 = document.getElementById("dot 0 0");
   var rect = dot1.getBoundingClientRect();
   if (document.body.clientWidth > 600) canvas.style.cursor = "pointer";
@@ -67,8 +87,8 @@ function init() {
     universalEvent = draw(event, true);
     console.log(" i am getting fired");
   };
-setInterval(update_board, 500)
-//   update_board();
+  setInterval(update_board, 500);
+  //   update_board();
 }
 
 function draw(event, temp) {
@@ -160,54 +180,83 @@ function update_game(game) {
   color = game["dash_board"][you][1];
   // console.log(color);
   scoreBoard = document.getElementById("scoreBoard");
-  scoreBoard.innerHTML = "";
-  for (var ele in game["dash_board"]) {
-    var p = document.createElement("p");
-    p.innerHTML = `${ele}: ${game["dash_board"][ele][0]}`;
-    scoreBoard.appendChild(p);
-  }
-  var p = document.createElement("p");
-  p.innerHTML = `Now ${game["next_turn"]} turn`;
-  scoreBoard.appendChild(p);
+  console.log(
+    document.getElementById("scoreBoard").querySelectorAll(".score").length,
+    Object.keys(game["dash_board"]).length,
+    "kehjs"
+  );
+  if (
+    Object.keys(game["dash_board"]).length >
+    document.getElementById("scoreBoard").querySelectorAll(".score").length
+  ) {
+    scoreBoard.innerHTML = "";
+    for (var ele in game["dash_board"]) {
+      var p = document.createElement("p");
+      p.classList.add("score");
+      p.id = "score_" + ele;
+      p.innerHTML = `${ele}: ${game["dash_board"][ele][0]}`;
+      scoreBoard.appendChild(p);
+    }
+    var l = document.createElement("p");
+    l.id = "next_id";
+    l.innerHTML = `Now ${game["next_turn"]} turn`;
+    scoreBoard.appendChild(l);
+
+    var canvas = document.getElementById("playground");
+    corArry = [];
+    canvas.querySelectorAll(".row").forEach((ele, index) => {
+      corArry.push([]);
+      ele.querySelectorAll(".dot").forEach((el) => {
+        var r = el.getBoundingClientRect();
+        corArry[index].push({ x: r.x, y: r.y });
+      });
+    });
+    console.log(corArry)
+  } else
+    for (var ele in game["dash_board"]) {
+      document.getElementById(
+        "score_" + ele
+      ).innerHTML = `${ele}: ${game["dash_board"][ele][0]}`;
+    }
+
+  document.getElementById(
+    "next_id"
+  ).innerHTML = `Now ${game["next_turn"]} turn`;
 
   game["board"].forEach((element, i) => {
     element.forEach((ele, j) => {
       // if (ele) console.log(j, i, ele);
+      x = corArry[Math.floor(i / 2)][Math.floor(j / 2)].x;
+      y = corArry[Math.floor(i / 2)][Math.floor(j / 2)].y;
+
       if (ele && j % 2 == 0 && i % 2 != 0) {
-        // console.log(
-        //   j,
-        //   i,
-        //   game["dash_board"][ele][1],
-        //   Math.floor((j - 1) / 2),
-        //   Math.floor(i / 2)
-        // );
-        drawLineY(
-          corArry[Math.floor(i / 2)][Math.floor(j / 2)].x,
-          corArry[Math.floor(i / 2)][Math.floor(j / 2)].y,
-          game["dash_board"][ele][1]
-        );
+        if (document.getElementById(`lineY_${x}_${y}`) == null) {
+          console.log(
+            document.getElementById(`lineY_${x}_${y}`) == null,
+            document.getElementById(`lineY_${x}_${y}`),
+            null
+          );
+          drawLineY(x, y, game["dash_board"][ele][1]);
+        }
       }
       if (ele && j % 2 != 0 && i % 2 == 0) {
-        // console.log(
-        //   j,
-        //   i,
-        //   game["dash_board"][ele][1],
-        //   Math.floor((j - 1) / 2),
-        //   Math.floor(i / 2)
-        // );
-        drawLineX(
-          corArry[Math.floor(i / 2)][Math.floor(j / 2)].x,
-          corArry[Math.floor(i / 2)][Math.floor(j / 2)].y - 5,
-          game["dash_board"][ele][1]
-        );
+        if (document.getElementById(`lineX_${x}_${y - 5}`) == null) {
+          // console.log(
+          //   document.getElementById(`lineX_${x}_${y}`) == null,
+          //   `lineX_${x}_${y}`,
+          //   null
+          // );
+          drawLineX(x, y - 5, game["dash_board"][ele][1]);
+        }
       }
       if (ele && i % 2 != 0 && j % 2 != 0) {
-        writeInitail(
-          corArry[Math.floor(i / 2)][Math.floor(j / 2)].x+5,
-          corArry[Math.floor(i / 2)][Math.floor(j / 2)].y,
-          ele.substring(0, 1),
-          game["dash_board"][ele][1]
-        );
+        if (document.getElementById(`pl_${x + gap / 2}_${y + gap / 4}`) == null)
+          writeInitail(
+            x + gap / 2,
+            y + gap / 4,
+            ele.substring(0, 1),
+            game["dash_board"][ele][1]
+          );
       }
     });
   });
@@ -218,10 +267,11 @@ function writeInitail(x, y, n, colorNP) {
   var p = document.createElement("p");
   p.style.top = y + "px";
   p.style.left = x + "px";
+  p.id = `pl_${x}_${y}`;
   p.style.color = colorNP;
   p.classList.add("letter");
   p.innerHTML = n;
-  p.style.font=""
+  p.style.font = "";
   canvas.appendChild(p);
 }
 
@@ -232,7 +282,7 @@ function drawtempLineX(x, y) {
   line.classList.add("tempLine");
   line.style.borderColor = "grey";
   line.style.color = "grey";
-  line.style.width = "18px";
+  line.style.width = gap + 6 + "px";
   line.style.height = "5px";
   line.style.borderBottom = "2px solid";
   line.style.position = "absolute";
@@ -248,7 +298,7 @@ function drawtempLineY(x, y) {
   line.classList.add("tempLine");
   line.style.borderColor = "grey";
   line.style.color = "grey";
-  line.style.height = "18px";
+  line.style.height = gap + 6 + "px";
   line.style.borderLeft = "2px solid";
   line.style.position = "absolute";
   line.style.top = y + "px";
@@ -260,7 +310,8 @@ function drawLineX(x, y, colorIN) {
   //   console.log(x, y);
   var canvas = document.getElementById("playground");
   var line = document.createElement("div");
-  line.style.width = "18px";
+  line.style.width = gap + 8 + "px";
+  line.id = `lineX_${x}_${y}`;
   line.style.color = colorIN;
   line.style.height = "5px";
   line.style.borderBottom = "2px solid";
@@ -275,8 +326,9 @@ function drawLineY(x, y, colorIN) {
   var canvas = document.getElementById("playground");
   var line = document.createElement("div");
   line.style.width = "5px";
+  line.id = `lineY_${x}_${y}`;
   line.style.color = colorIN;
-  line.style.height = "18px";
+  line.style.height = gap + 8 + "px";
   line.style.borderLeft = "2px solid";
   line.style.position = "absolute";
   line.style.top = y + "px";
