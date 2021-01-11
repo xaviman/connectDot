@@ -15,26 +15,66 @@
 
 <body>
     <audio src="{% static 'audio/bob.mp3' %}" id="sound"></audio>
+    <audio src="{% static 'audio/correct.wav' %}" id="sound2"></audio>
+    <p style="position: fixed; bottom:0; right:20px">Made by Xavier</p>
     {% if name %}
-    <h2>your name</h2>
-    <input id="name" value="">
+    <div style="background-color: cornflowerblue; color:white; padding:20px">
+        <h3>How to play?</h3>
+        <h4> Each player can draw a line, if the line make a box then the point goes to the player who turn is going on,
+            you get extra turn if you get point. Enjoy!</h4>
+    </div>
+    <div style="display: inline-flex; margin: 20px auto">
+        <h2 style="margin: 0; display: table">Enter name:</h2>
+        <input autocomplete="off" id="name" style="width: 120px; font-size: 25px; text-align: center" value="">
+    </div>
     <button type="button" onclick="sub(true)">submit</button>
     {% elif menu %}
-    <h2>your name</h2>
-    <input id="name" value="">
-    <h2>Input the number of player</h2>
-    <input id="member" value="2">
-    <h2>Input the number of grid</h2>
-    <input id="numbers" value="10">
-    <button type="button" onclick="sub(false)">submit</button>
+    <div style="background-color: cornflowerblue; color:white; padding:20px">
+        <h3>How to play?</h3>
+        <h4> Each player can draw a line, if the line make a box then the point goes to the player who turn is going on,
+            you get extra turn if you get point. Enjoy!</h4>
+    </div>
+    <h1>Create a game</h1>
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                    <h2>Player name:</h2>
+                </td>
+                <td>
+                    <input autocomplete="off" id="name" style="width: 120px; font-size: 25px;" value=""></td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="inner">
+                        <p>No. of player:</p>
+                        <input autocomplete="off" style="width: 20px" id="member" value="2">
+                    </div>
+                </td>
+
+                <td>
+                    <div class="inner">
+                        <p>No. of grid:</p>
+                        <input autocomplete="off" style="width: 20px" id="numbers" value="10">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><button type="button" onclick="sub(false)">Create</button></td>
+            </tr>
+        </tbody>
+    </table>
     {% else %}
-    <h2 id="start" style="margin: auto; text-align: center;">Game NOT Started!</h2>
+    <div class="bigga">
+    <h2 id="start" style="margin: 0px auto 20px auto; text-align: center;">Game NOT Started!</h2>
     <div style="margin: auto;display:table" id="scoreBoard">
         {% for player, score in dash_board.items %}
         <p class="score" id="score_{{ player }}">{{ player }}:{{ score }} </p>
         {% endfor %}
-        <p id="next_id"> NOw mt asubd</p>
+        <h3 id="next_id"> NOw mt asubd</h3>
     </div>
+</div>
     <div id="playground" rows="{{ rows }}" columns="{{ columns }}">
         {% for row in rows %}
         <div class="row" style="">
@@ -44,10 +84,10 @@
         </div>
         {% endfor %}
     </div>
-    <p style="margin: 0; text-align:center">Copy the link to invite friends</p>
-    <div style="margin: 20px auto; display:table">
-        <input id="copy">
-        <button onclick="copyToClip()">Copy</button>
+    <!-- <p style="margin: 0; text-align:center">Copy the link to invite friends</p> -->
+    <div style="margin: 20px auto; display:flex; width:90%">
+        <input style="display:; border:none; width: -webkit-fill-available" autocomplete="off" id="copy">
+        <button onclick="copyToClip()" style="    margin: 0 3px;white-space: nowrap;">Copy Link</button>
     </div>
     {% endif %}
 </body>

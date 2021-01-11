@@ -1,17 +1,69 @@
-body{
-   
+body {
+  margin: 0;
+  max-width: 600px;
+  margin: auto;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+  color: firebrick;
 }
 
+h1 {
+  text-align: center;
+  color: firebrick;
+  margin: 10px auto;
+}
+
+textarea:focus,
+input:focus {
+  outline: none;
+}
+button {
+  margin: 20px auto;
+  /* position: static; */
+  display: block;
+  border: none;
+  background: cornflowerblue;
+  color: white;
+  font-size: 20px;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+input {
+  /* width: 50px; */
+  border: none;
+  border-bottom: 0.5px grey solid;
+}
+.inner {
+  display: flex;
+}
+table p {
+  margin: 0;
+  display: table;
+}
+table input {
+  text-align: center;
+}
+table {
+  text-align: left;
+  padding: 20px;
+  border: 1px grey solid;
+  border-radius: 20px;
+  margin: auto;
+}
+table tr:nth-child(odd) {
+}
 #playground {
-    background-color: cornsilk;
-    margin: auto;
-    display: block;
-    /* cursor: pointer; */
-    /* margin: 20px 0; */
+  background-color: cornsilk;
+  margin: auto;
+  display: block;
+  max-width: 600px;
+  padding: 10px;
+  /* cursor: pointer; */
+  /* margin: 20px 0; */
 }
 
-.dot{
-    height: 2px;
+.dot {
+  height: 2px;
   width: 2px;
   background-color: black;
   border-radius: 50%;
@@ -19,13 +71,29 @@ body{
   margin: auto;
 }
 
-.letter{
-    font-family: "monospace";
-    margin: 0;
-    height: 5px;
-    width: 5px;
-    position: absolute;
+.row {
+  padding: 0;
+  text-align: left;
+  white-space: nowrap;
 }
-.score{
-    margin: 0;
+
+.letter {
+  font-family: "monospace";
+  margin: 0;
+  height: 5px;
+  width: 5px;
+  position: absolute;
+}
+.score {
+  margin: 0;
+}
+
+.bigga {
+  background: cornflowerblue;
+  color: white;
+  padding: 20px 0 0 0;
+}
+
+.bigga h2 {
+  margin-bottom: 20px;
 }

@@ -41,7 +41,7 @@ function init() {
   columns =
     canvas.querySelectorAll(".dot").length /
     canvas.querySelectorAll(".row").length;
-  gap = (Math.min(canvas.clientWidth, 600) - columns * 6) / columns;
+  gap = (Math.min(canvas.clientWidth, 600) - columns * 8) / columns;
   console.log(
     gap,
     canvas.clientWidth,
@@ -177,6 +177,9 @@ function draw(event, temp) {
 
 function update_game(game) {
   try {
+    if (game["won"] != false) {
+      document.getElementById("next_id").innerHTML = `${game["won"]} won!!`;
+    }
     //console.log(document.getElementById("score_" + ele).innerHTML)
     if (
       `${you}: ${game["dash_board"][you][0]}` !=
@@ -186,17 +189,20 @@ function update_game(game) {
         `${you}: ${game["dash_board"][you][0]}`,
         document.getElementById("score_" + you).innerHTML
       );
-      document.getElementById("sound").play();
+      document.getElementById("sound2").play();
     }
     if (
       `Now ${game["next_turn"]} turn` !=
       document.getElementById("next_id").innerHTML
     ) {
-      document.getElementById(
-        "next_id"
-      ).innerHTML = `Now ${game["next_turn"]} turn`;
-      document.getElementById("sound").play();
+      if (game["status"]) l = `Now ${game["next_turn"]} turn`;
+      else
+        l = `Waiting for ${
+          parseInt(game["member"]) - Object.keys(game["dash_board"]).length
+        }`;
+      if (!game["won"]) document.getElementById("next_id").innerHTML = l;
 
+      document.getElementById("sound").play();
     }
   } catch (e) {
     console.log(e, "error");
@@ -227,7 +233,15 @@ function update_game(game) {
     }
     var l = document.createElement("p");
     l.id = "next_id";
-    l.innerHTML = `Now ${game["next_turn"]} turn`;
+    if (game["status"] && !game["won"])
+      l.innerHTML = `Now ${game["next_turn"]} turn`;
+    else if (!game["won"])
+      l.innerHTML = `Waiting for ${
+        parseInt(game("member")) - Object.keys(game["dash_board"]).length
+      }`;
+    else {
+      l.innerHTML = `${game["won"]} won!!`;
+    }
     scoreBoard.appendChild(l);
 
     var canvas = document.getElementById("playground");
@@ -274,9 +288,10 @@ function update_game(game) {
         }
       }
       if (ele && i % 2 != 0 && j % 2 != 0) {
-        if (document.getElementById(`pl_${x + gap / 2}_${y + gap / 4}`) == null)
+        if (document.getElementById(`pl_${x + gap / 3}_${y + gap / 4}`) == null)
           writeInitail(
-            x + gap / 2,
+            gap / 1.5,
+            x + gap / 3,
             y + gap / 4,
             ele.substring(0, 1),
             game["dash_board"][ele][1]
@@ -286,16 +301,17 @@ function update_game(game) {
   });
 }
 
-function writeInitail(x, y, n, colorNP) {
+function writeInitail(font, x, y, n, colorNP) {
   var canvas = document.getElementById("playground");
   var p = document.createElement("p");
+
   p.style.top = y + "px";
   p.style.left = x + "px";
   p.id = `pl_${x}_${y}`;
   p.style.color = colorNP;
   p.classList.add("letter");
   p.innerHTML = n;
-  p.style.font = "";
+  p.style.fontSize = font + "px";
   canvas.appendChild(p);
 }
 
@@ -306,7 +322,7 @@ function drawtempLineX(x, y) {
   line.classList.add("tempLine");
   line.style.borderColor = "grey";
   line.style.color = "grey";
-  line.style.width = gap + 6 + "px";
+  line.style.width = gap + 8 + "px";
   line.style.height = "5px";
   line.style.borderBottom = "2px solid";
   line.style.position = "absolute";
@@ -322,7 +338,7 @@ function drawtempLineY(x, y) {
   line.classList.add("tempLine");
   line.style.borderColor = "grey";
   line.style.color = "grey";
-  line.style.height = gap + 6 + "px";
+  line.style.height = gap + 8 + "px";
   line.style.borderLeft = "2px solid";
   line.style.position = "absolute";
   line.style.top = y + "px";
@@ -390,6 +406,7 @@ const update_board = () => {
     if (request_get.status >= 200 && request_get.status < 400) {
       // console.log(request_get.responseText);
       var json = JSON.parse(request_get.responseText);
+      // console.log(json, "json");
       // console.log(json);
       update_game(json);
 

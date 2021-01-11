@@ -67,7 +67,7 @@ def get_move(request, code, name, move):
     try:
         game = Game.objects.get(game_id=code[0])
         board = json.loads(game.board)
-        if board[int(k[0])][int(k[1])]==0:
+        if board[int(k[0])][int(k[1])] == 0:
             past = check_win(board)
             board[int(k[0])][int(k[1])] = name
             for i in range(len(board)):
@@ -77,17 +77,18 @@ def get_move(request, code, name, move):
             win_difference = [item for item in present if item not in past]
             print(win_difference, len(present), present)
             dash_board = json.loads(game.dash_board)
-            
+
             if win_difference:
                 dash_board[name][0] += len(win_difference)
                 game.dash_board = json.dumps(dash_board)
                 for win in win_difference:
                     board[win[0]][win[1]] = name
             else:
-                ke= [i for i in dash_board.keys()]
-                print("indeix", ke[0 if ke.index(name)+1 >= len(ke) else ke.index(name)+1])
-                game.next_turn =  ke[0 if ke.index(name)+1 >= len(ke) else ke.index(name)+1]
-            
+                ke = [i for i in dash_board.keys()]
+                print("indeix", ke[0 if ke.index(name) +
+                                   1 >= len(ke) else ke.index(name)+1])
+                game.next_turn = ke[0 if ke.index(
+                    name)+1 >= len(ke) else ke.index(name)+1]
 
         game.board = json.dumps(board)
         game.save()
@@ -110,6 +111,18 @@ def update_board(request, code):
         game = Game.objects.get(game_id=code)
         board = json.loads(game.board)
         dash_board = json.loads(game.dash_board)
-        return JsonResponse({"status": 200, "box": False, "board": board, "dash_board": dash_board, "status": game.start, "next_turn": game.next_turn})
+        k = 0
+        for i in dash_board:
+            k += dash_board[i][0]
+        
+        won = False
+        if(k == int((len(board)-1)*(len(board)-1)/4)):
+            l = 0
+            for i in dash_board:
+                print(dash_board[i][0], type(dash_board[i][0]))
+                if l < dash_board[i][0]:
+                    l = dash_board[i][0]
+                    won = i
+        return JsonResponse({"status":200 , "box": False, "board": board, "dash_board": dash_board, "status": game.start, "next_turn": game.next_turn, "member": game.number_of_members, "won": won})
     except Exception as e:
         return JsonResponse({"status": 400, "error": str(e)})
