@@ -29,7 +29,10 @@ loc = window.location.pathname;
 var you = loc.split("/")[3];
 var myturn = false;
 var gap;
+var sound;
 function init() {
+  sound = document.getElementById("sound");
+  // sound.muted = true
   document.getElementById("copy").value = window.location.href.substring(
     0,
     window.location.href.indexOf("/", 40)
@@ -173,6 +176,31 @@ function draw(event, temp) {
 }
 
 function update_game(game) {
+  try {
+    //console.log(document.getElementById("score_" + ele).innerHTML)
+    if (
+      `${you}: ${game["dash_board"][you][0]}` !=
+      document.getElementById("score_" + you).innerHTML
+    ) {
+      console.log(
+        `${you}: ${game["dash_board"][you][0]}`,
+        document.getElementById("score_" + you).innerHTML
+      );
+      document.getElementById("sound").play();
+    }
+    if (
+      `Now ${game["next_turn"]} turn` !=
+      document.getElementById("next_id").innerHTML
+    ) {
+      document.getElementById(
+        "next_id"
+      ).innerHTML = `Now ${game["next_turn"]} turn`;
+      document.getElementById("sound").play();
+
+    }
+  } catch (e) {
+    console.log(e, "error");
+  }
   myturn = game["status"] && game["next_turn"] == you;
   document.getElementById("start").innerHTML = game["status"]
     ? "Game Started!"
@@ -180,11 +208,11 @@ function update_game(game) {
   color = game["dash_board"][you][1];
   // console.log(color);
   scoreBoard = document.getElementById("scoreBoard");
-  console.log(
-    document.getElementById("scoreBoard").querySelectorAll(".score").length,
-    Object.keys(game["dash_board"]).length,
-    "kehjs"
-  );
+  // console.log(
+  //   document.getElementById("scoreBoard").querySelectorAll(".score").length,
+  //   Object.keys(game["dash_board"]).length,
+  //   "kehjs"
+  // );
   if (
     Object.keys(game["dash_board"]).length >
     document.getElementById("scoreBoard").querySelectorAll(".score").length
@@ -211,17 +239,13 @@ function update_game(game) {
         corArry[index].push({ x: r.x, y: r.y });
       });
     });
-    console.log(corArry)
+    console.log(corArry);
   } else
     for (var ele in game["dash_board"]) {
       document.getElementById(
         "score_" + ele
       ).innerHTML = `${ele}: ${game["dash_board"][ele][0]}`;
     }
-
-  document.getElementById(
-    "next_id"
-  ).innerHTML = `Now ${game["next_turn"]} turn`;
 
   game["board"].forEach((element, i) => {
     element.forEach((ele, j) => {

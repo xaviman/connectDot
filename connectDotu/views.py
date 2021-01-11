@@ -5,7 +5,7 @@ from .models import Move, Game
 
 
 def create_Game(code, board, name, members):
-    color = ["red", "blue", "yellow", "black"]
+    color = ["red", "blue", "green", "black"]
     print(code, board, name)
     try:
         game = Game.objects.get(game_id=code)
@@ -79,10 +79,10 @@ def get_move(request, code, name, move):
             dash_board = json.loads(game.dash_board)
             
             if win_difference:
-                
-                dash_board[name][0] += 1
+                dash_board[name][0] += len(win_difference)
                 game.dash_board = json.dumps(dash_board)
-                board[win_difference[0][0]][win_difference[0][1]] = name
+                for win in win_difference:
+                    board[win[0]][win[1]] = name
             else:
                 ke= [i for i in dash_board.keys()]
                 print("indeix", ke[0 if ke.index(name)+1 >= len(ke) else ke.index(name)+1])
