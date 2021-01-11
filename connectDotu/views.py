@@ -123,6 +123,6 @@ def update_board(request, code):
                 if l < dash_board[i][0]:
                     l = dash_board[i][0]
                     won = i
-        return JsonResponse({"status":200 , "box": False, "board": board, "dash_board": dash_board, "status": game.start, "next_turn": game.next_turn, "member": game.number_of_members, "won": won})
+        return JsonResponse({ "box": False, "board": board, "dash_board": dash_board, "status": game.start, "next_turn": game.next_turn, "member": game.number_of_members, "won": won})
     except Exception as e:
         return JsonResponse({"status": 400, "error": str(e)})

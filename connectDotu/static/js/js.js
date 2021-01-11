@@ -201,8 +201,7 @@ function update_game(game) {
           parseInt(game["member"]) - Object.keys(game["dash_board"]).length
         }`;
       if (!game["won"]) document.getElementById("next_id").innerHTML = l;
-
-      document.getElementById("sound").play();
+      if (game["status"]) document.getElementById("sound").play();
     }
   } catch (e) {
     console.log(e, "error");
