@@ -31,8 +31,17 @@ def create_Game(code, board, name, members):
         game.save()
         return game
 
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    print(ip)
+    return ip
 
 def index(request, code=False, name=False):
+    get_client_ip(request)
     template = loader.get_template('connectDotu/index.html')
     if code and name:
         code = code.split("_")
